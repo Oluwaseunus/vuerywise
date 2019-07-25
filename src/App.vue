@@ -1,10 +1,16 @@
 <template>
   <div id="app">
     <div class="search-container">
-      <form @submit.prevent="handleSubmit">
+      <form v-if="showSearchBar" @submit.prevent="handleSubmit">
         <input v-model="search" type="text" placeholder="Search for photo" class="search-box_input" />
       </form>
+
+      <p v-if="!showSearchBar" class="search-text">
+        Showing results for
+        <span class="search-quote">"{{ searchItem }}"</span>
+      </p>
     </div>
+
     <div class="pictures-container" v-if="photos.length">
       <PhotoGridItem v-for="photo in photos" :key="photo.id" :photo="photo" />
     </div>
@@ -21,12 +27,18 @@
     data() {
       return {
         photos: [],
-        search: ""
+        search: "",
+        showSearchBar: true
       };
+    },
+    computed: {
+      searchItem() {
+        return this.search[0].toUpperCase() + this.search.slice(1);
+      }
     },
     methods: {
       handleSubmit() {
-        console.log(this.search);
+        if (this.search.trim()) this.showSearchBar = !this.showSearchBar;
       }
     },
     mounted() {
@@ -46,9 +58,12 @@
   }
 
   .search-container {
+    display: flex;
     width: 100%;
-    height: 25vh;
     background-color: #dde2e9;
+    justify-content: center;
+    align-items: center;
+    height: 25vh;
 
     form {
       width: 100%;
@@ -68,6 +83,15 @@
           outline: none;
         }
       }
+    }
+  }
+
+  .search-text {
+    font-size: 4rem;
+    color: #2f4160;
+
+    .search-quote {
+      color: #6e7c90;
     }
   }
 </style>
