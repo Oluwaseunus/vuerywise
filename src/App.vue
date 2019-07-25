@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <div class="bg">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -13,5 +15,12 @@
 <style lang="scss">
   #app {
     margin: auto;
+  }
+
+  .bg {
+    background: #dde2e9;
+    height: 25vh;
+    float: right;
+    width: 100vw;
   }
 </style>

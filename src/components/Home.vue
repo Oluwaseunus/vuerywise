@@ -1,14 +1,9 @@
 <template>
   <div>
     <div class="search-container">
-      <form v-if="showSearchBar" @submit.prevent="handleSubmit">
+      <form @submit.prevent="handleSubmit">
         <input v-model="search" type="text" placeholder="Search for photo" class="search-box_input" />
       </form>
-
-      <p v-if="!showSearchBar" class="search-text">
-        Showing results for
-        <span class="search-quote">"{{ searchItem }}"</span>
-      </p>
     </div>
 
     <div class="pictures-container" v-if="photos.length">
@@ -19,16 +14,17 @@
 
 <script>
   import PhotoGridItem from "./PhotoGridItem";
+  import searchAPI from "../helpers/searchAPI";
 
   export default {
+    name: "Home",
     components: {
       PhotoGridItem
     },
     data() {
       return {
         photos: [],
-        search: "",
-        showSearchBar: true
+        search: ""
       };
     },
     computed: {
@@ -38,16 +34,20 @@
     },
     methods: {
       handleSubmit() {
-        if (this.search.trim()) this.showSearchBar = !this.showSearchBar;
+        const trimmedSearch = this.search.trim();
+
+        if (trimmedSearch) {
+          this.$router.push({
+            path: "search",
+            query: {
+              q: trimmedSearch
+            }
+          });
+        }
       }
     },
-    mounted() {
-      fetch(
-        `https://api.unsplash.com/search/photos?client_id=${process.env.VUE_APP_ACCESS}&query='African'`
-      )
-        .then(response => response.json())
-        .then(data => (this.photos = data.results))
-        .then(() => console.log(this.photos));
+    async mounted() {
+      this.photos = await searchAPI("africa");
     }
   };
 </script>
