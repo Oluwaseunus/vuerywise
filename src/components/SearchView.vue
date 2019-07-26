@@ -13,6 +13,7 @@
     name: "SearchView",
     data() {
       return {
+        loading: true,
         photos: []
       };
     },
@@ -23,6 +24,7 @@
     },
     async mounted() {
       this.photos = await searchAPI(this.query);
+      this.loading = false;
     }
   };
 </script>

@@ -7,7 +7,9 @@
     </div>
 
     <div class="pictures-container" v-if="photos.length">
-      <PhotoGridItem v-for="photo in photos" :key="photo.id" :photo="photo" />
+      <masonry :cols="3" :gutter="20" v-if="photos.length">
+        <PhotoGridItem v-for="photo in photos" :key="photo.id" :photo="photo" />
+      </masonry>
     </div>
   </div>
 </template>
@@ -47,7 +49,7 @@
       }
     },
     async mounted() {
-      this.photos = await searchAPI("africa");
+      this.photos = await searchAPI("coding");
     }
   };
 </script>
